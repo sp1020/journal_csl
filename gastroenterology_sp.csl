@@ -3,7 +3,7 @@
   <info>
     <title>Gastroenterology_sp</title>
     <id>http://www.zotero.org/styles/gastroenterology_sp</id>
-    <link href="http://www.zotero.org/styles/gastroenterology" rel="self"/>
+    <link href="http://www.zotero.org/styles/gastroenterology_sp" rel="self"/>
     <link href="http://gastrojournal.org/authorinfo" rel="documentation"/>
     <author>
       <name>Seungpyo Hong</name>
@@ -88,7 +88,7 @@
     <key variable="citation-number"/>
   </sort>
   <layout delimiter=",">
-    <text variable="citation-number" font-variant="superscript"/>
+    <text variable="citation-number" vertical-align="sup"/>
     <group prefix="(" suffix=")">
       <label variable="locator" form="short" strip-periods="true"/>
       <text variable="locator"/>
