@@ -83,18 +83,18 @@
     </choose>
   </macro>
 
-  <citation collapse="citation-number">
-    <sort>
-      <key variable="citation-number"/>
-    </sort>
-    <layout delimiter="," vertical-align="sup">
-      <text variable="citation-number"/>
-      <group prefix="(" suffix=")">
-        <label variable="locator" form="short" strip-periods="true"/>
-        <text variable="locator"/>
-      </group>
-    </layout>
-  </citation>
+<citation collapse="citation-number">
+  <sort>
+    <key variable="citation-number"/>
+  </sort>
+  <layout delimiter=",">
+    <text variable="citation-number" font-variant="superscript"/>
+    <group prefix="(" suffix=")">
+      <label variable="locator" form="short" strip-periods="true"/>
+      <text variable="locator"/>
+    </group>
+  </layout>
+</citation>
 
   <!-- Use up to 6 authors, then et al.; align numbers flush -->
   <bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush">
