@@ -6,26 +6,29 @@
     <link href="http://www.zotero.org/styles/gastroenterology" rel="self"/>
     <link href="http://gastrojournal.org/authorinfo" rel="documentation"/>
     <author>
-      <name>Michael Docherty</name>
-      <email>mdocherty@ucsd.edu</email>
+      <name>Seungpyo Hong</name>
+      <email>seungpyo.hong@jbnu.ac.kr</email>
     </author>
     <category citation-format="numeric"/>
     <category field="medicine"/>
     <issn>0016-5085</issn>
     <eissn>1528-0012</eissn>
     <summary>Style for Gastroenterology, the journal of the AGA</summary>
-    <updated>2012-09-27T22:06:38+00:00</updated>
+    <updated>2025-08-20T00:00:00+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
+
   <macro name="editor">
     <names variable="editor">
       <name name-as-sort-order="all" sort-separator=" " initialize-with="" delimiter=", " delimiter-precedes-last="always"/>
       <label form="short" prefix=", "/>
     </names>
   </macro>
+
   <macro name="anon">
     <text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/>
   </macro>
+
   <macro name="author">
     <group suffix=".">
       <names variable="author">
@@ -38,22 +41,16 @@
       </names>
     </group>
   </macro>
+
+  <!-- URL only for true webpages (no “Available at:” and no access date) -->
   <macro name="access">
     <choose>
-      <if variable="URL">
-        <text value="Available at:" suffix=" "/>
+      <if type="webpage post-weblog" match="any">
         <text variable="URL"/>
-        <group prefix=" [" suffix="]">
-          <text term="accessed" text-case="capitalize-first" suffix=" "/>
-          <date variable="accessed">
-            <date-part name="month" suffix=" "/>
-            <date-part name="day" suffix=", "/>
-            <date-part name="year"/>
-          </date>
-        </group>
       </if>
     </choose>
   </macro>
+
   <macro name="title">
     <choose>
       <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
@@ -64,12 +61,14 @@
       </else>
     </choose>
   </macro>
+
   <macro name="publisher">
     <group delimiter=": ">
       <text variable="publisher-place"/>
       <text variable="publisher"/>
     </group>
   </macro>
+
   <macro name="edition">
     <choose>
       <if is-numeric="edition">
@@ -83,6 +82,7 @@
       </else>
     </choose>
   </macro>
+
   <citation collapse="citation-number">
     <sort>
       <key variable="citation-number"/>
@@ -95,13 +95,35 @@
       </group>
     </layout>
   </citation>
-  <bibliography et-al-min="4" et-al-use-first="3" second-field-align="flush">
+
+  <!-- Use up to 6 authors, then et al.; align numbers flush -->
+  <bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush">
     <layout>
       <text variable="citation-number" suffix=". "/>
-      <text macro="author"/>
+      <!-- Dataset special case per journal guidance -->
       <choose>
-        <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
+        <if type="dataset">
+          <group delimiter=" ">
+            <text value="[dataset]"/>
+            <text macro="author"/>
+            <text variable="title" suffix="."/>
+            <text variable="publisher" suffix=";"/>
+            <date variable="issued">
+              <date-part name="year"/>
+            </date>
+            <text variable="version" prefix=" " suffix="."/>
+            <text variable="DOI" prefix=" doi:"/>
+            <choose>
+              <if variable="DOI" match="none">
+                <text variable="URL" prefix=" "/>
+              </if>
+            </choose>
+          </group>
+        </if>
+
+        <else-if type="bill book graphic legal_case legislation motion_picture report song" match="any">
           <group suffix=".">
+            <text macro="author"/>
             <text macro="title" prefix=" " suffix="."/>
             <text macro="edition" prefix=" "/>
             <text macro="editor" prefix=" (" suffix=")"/>
@@ -113,8 +135,10 @@
             </date>
             <text variable="page" prefix=":"/>
           </group>
-        </if>
+        </else-if>
+
         <else-if type="chapter paper-conference" match="any">
+          <text macro="author"/>
           <text macro="title" prefix=" " suffix="."/>
           <group prefix=" ">
             <text term="in" text-case="capitalize-first" suffix=": "/>
@@ -134,12 +158,15 @@
             </group>
           </group>
         </else-if>
+
         <else>
+          <text macro="author"/>
           <group suffix=".">
             <text macro="title" prefix=" "/>
             <text macro="editor" prefix=" "/>
           </group>
           <group prefix=" " suffix=".">
+            <!-- Index Medicus abbreviations: short form without periods -->
             <text variable="container-title" form="short" strip-periods="true"/>
             <group delimiter=";" prefix=" ">
               <date variable="issued">
@@ -153,6 +180,8 @@
           </group>
         </else>
       </choose>
+
+      <!-- Only shows for webpages due to access macro above -->
       <text prefix=" " macro="access" suffix="."/>
     </layout>
   </bibliography>
