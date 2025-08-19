@@ -1,40 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<style xmlns="http://purl.org/net/xbiblio/csl" version="1.0" class="in-text" default-locale="en-US">
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" default-locale="en-US">
   <info>
-    <title>Gastroenterology (no URL/DOI, basic)</title>
-    <id>http://www.zotero.org/styles/gastroenterology-no-url-doi-basic-seungpyo-2025-08-19</id>
-    <link href="http://www.zotero.org/styles/gastroenterology-no-url-doi-basic-seungpyo-2025-08-19" rel="self"/>
+    <title>Gastroenterology</title>
+    <id>http://www.zotero.org/styles/gastroenterology</id>
+    <link href="http://www.zotero.org/styles/gastroenterology" rel="self"/>
+    <link href="http://gastrojournal.org/authorinfo" rel="documentation"/>
+    <author>
+      <name>Michael Docherty</name>
+      <email>mdocherty@ucsd.edu</email>
+    </author>
     <category citation-format="numeric"/>
     <category field="medicine"/>
-    <summary>Numeric style similar to Gastroenterology; URLs and DOIs suppressed.</summary>
-    <updated>2025-08-19T00:00:00+00:00</updated>
-    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">
-      This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License
-    </rights>
+    <issn>0016-5085</issn>
+    <eissn>1528-0012</eissn>
+    <summary>Style for Gastroenterology, the journal of the AGA</summary>
+    <updated>2012-09-27T22:06:38+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
-
-  <!-- Names/macros kept simple to avoid edge-case parser issues -->
-  <macro name="author">
-    <names variable="author">
-      <name name-as-sort-order="all" sort-separator=" " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
-      <substitute>
-        <names variable="editor"/>
-        <text value="Anonymous"/>
-      </substitute>
-    </names>
-    <text value="."/>
-  </macro>
-
   <macro name="editor">
     <names variable="editor">
-      <name name-as-sort-order="all" sort-separator=" " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
+      <name name-as-sort-order="all" sort-separator=" " initialize-with="" delimiter=", " delimiter-precedes-last="always"/>
       <label form="short" prefix=", "/>
     </names>
   </macro>
-
+  <macro name="anon">
+    <text term="anonymous" form="short" text-case="capitalize-first" strip-periods="true"/>
+  </macro>
+  <macro name="author">
+    <group suffix=".">
+      <names variable="author">
+        <name name-as-sort-order="all" sort-separator=" " initialize-with="" delimiter=", " delimiter-precedes-last="always"/>
+        <label form="short" prefix=" " strip-periods="true"/>
+        <substitute>
+          <names variable="editor"/>
+          <text macro="anon"/>
+        </substitute>
+      </names>
+    </group>
+  </macro>
+  <macro name="access">
+    <choose>
+      <if variable="URL">
+        <text value="Available at:" suffix=" "/>
+        <text variable="URL"/>
+        <group prefix=" [" suffix="]">
+          <text term="accessed" text-case="capitalize-first" suffix=" "/>
+          <date variable="accessed">
+            <date-part name="month" suffix=" "/>
+            <date-part name="day" suffix=", "/>
+            <date-part name="year"/>
+          </date>
+        </group>
+      </if>
+    </choose>
+  </macro>
   <macro name="title">
     <choose>
-      <if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any">
+      <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
         <text variable="title" font-style="italic"/>
       </if>
       <else>
@@ -42,88 +64,96 @@
       </else>
     </choose>
   </macro>
-
   <macro name="publisher">
     <group delimiter=": ">
       <text variable="publisher-place"/>
       <text variable="publisher"/>
     </group>
   </macro>
-
-  <macro name="issued-year">
-    <date variable="issued">
-      <date-part name="year"/>
-    </date>
+  <macro name="edition">
+    <choose>
+      <if is-numeric="edition">
+        <group delimiter=" ">
+          <number variable="edition" form="ordinal"/>
+          <text term="edition" form="short"/>
+        </group>
+      </if>
+      <else>
+        <text variable="edition" suffix="."/>
+      </else>
+    </choose>
   </macro>
-
   <citation collapse="citation-number">
     <sort>
       <key variable="citation-number"/>
     </sort>
-    <layout delimiter=",">
+    <layout delimiter="," vertical-align="sup">
       <text variable="citation-number"/>
-      <group prefix=" (" suffix=")">
+      <group prefix="(" suffix=")">
         <label variable="locator" form="short" strip-periods="true"/>
-        <text variable="locator" prefix=" "/>
+        <text variable="locator"/>
       </group>
     </layout>
   </citation>
-
-  <bibliography et-al-min="4" et-al-use-first="3">
+  <bibliography et-al-min="4" et-al-use-first="3" second-field-align="flush">
     <layout>
       <text variable="citation-number" suffix=". "/>
-      <text macro="author" suffix=" "/>
-
+      <text macro="author"/>
       <choose>
-        <!-- Books & reports -->
-        <if type="bill book graphic legal_case legislation motion_picture report song thesis" match="any">
-          <group delimiter=". " suffix=".">
-            <text macro="title"/>
-            <text macro="editor"/>
-            <text macro="publisher"/>
-            <group delimiter="; ">
-              <text macro="issued-year"/>
-              <text variable="page" prefix=":"/>
-            </group>
+        <if type="bill book graphic legal_case legislation motion_picture report song" match="any">
+          <group suffix=".">
+            <text macro="title" prefix=" " suffix="."/>
+            <text macro="edition" prefix=" "/>
+            <text macro="editor" prefix=" (" suffix=")"/>
+          </group>
+          <text prefix=" " macro="publisher"/>
+          <group suffix="." prefix="; ">
+            <date variable="issued">
+              <date-part name="year"/>
+            </date>
+            <text variable="page" prefix=":"/>
           </group>
         </if>
-
-        <!-- Chapters & conference papers -->
         <else-if type="chapter paper-conference" match="any">
-          <group delimiter=". " suffix=".">
-            <text macro="title"/>
-            <group>
-              <text term="in" text-case="capitalize-first" suffix=": "/>
-              <text macro="editor"/>
-              <text variable="container-title" font-style="italic" suffix="."/>
-              <text macro="publisher"/>
-              <group delimiter="; ">
-                <text macro="issued-year"/>
+          <text macro="title" prefix=" " suffix="."/>
+          <group prefix=" ">
+            <text term="in" text-case="capitalize-first" suffix=": "/>
+            <text macro="editor"/>
+            <text variable="container-title" font-style="italic" prefix=" " suffix="."/>
+            <text variable="volume" prefix="Vol " suffix="."/>
+            <text macro="edition" prefix=" "/>
+            <text variable="collection-title" prefix=" " suffix="."/>
+            <group suffix=".">
+              <text macro="publisher" prefix=" "/>
+              <group suffix="." prefix="; ">
+                <date variable="issued">
+                  <date-part name="year"/>
+                </date>
                 <text variable="page" prefix=":"/>
               </group>
             </group>
           </group>
         </else-if>
-
-        <!-- Journal articles -->
         <else>
-          <group delimiter=". " suffix=".">
-            <group>
-              <text macro="title"/>
-              <text macro="editor" prefix=" "/>
+          <group suffix=".">
+            <text macro="title" prefix=" "/>
+            <text macro="editor" prefix=" "/>
+          </group>
+          <group prefix=" " suffix=".">
+            <text variable="container-title" form="short" strip-periods="true"/>
+            <group delimiter=";" prefix=" ">
+              <date variable="issued">
+                <date-part name="year"/>
+              </date>
+              <group>
+                <text variable="volume"/>
+              </group>
             </group>
-            <group>
-              <text variable="container-title" form="short" strip-periods="true"/>
-              <text macro="issued-year" prefix=" "/>
-              <text variable="volume" prefix=";"/>
-              <text variable="issue" prefix="(" suffix=")"/>
-              <text variable="page" prefix=":"/>
-            </group>
+            <text variable="page" prefix=":"/>
           </group>
         </else>
       </choose>
-
-      <!-- Intentionally no URL or DOI output anywhere -->
+      <text prefix=" " macro="access" suffix="."/>
     </layout>
   </bibliography>
 </style>
